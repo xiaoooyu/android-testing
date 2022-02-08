@@ -22,12 +22,17 @@ import com.example.android.architecture.blueprints.todoapp.data.Task
  * Function that does some trivial computation. Used to showcase unit tests.
  */
 internal fun getActiveAndCompletedStats(tasks: List<Task>?): StatsResult {
-    val totalTasks = tasks!!.size
-    val numberOfActiveTasks = tasks.count { it.isActive }
-    return StatsResult(
-        activeTasksPercent = 100f * numberOfActiveTasks / tasks.size,
-        completedTasksPercent = 100f * (totalTasks - numberOfActiveTasks) / tasks.size
-    )
+    val totalTasks = tasks?.size ?: 0
+
+    return if (totalTasks == 0) {
+        StatsResult(0F, 0F)
+    } else {
+        val numberOfActiveTasks = tasks?.count { it.isActive } ?: 0
+        StatsResult(
+            activeTasksPercent = 100f * numberOfActiveTasks / totalTasks,
+            completedTasksPercent = 100f * (totalTasks - numberOfActiveTasks) / totalTasks
+        )
+    }
 }
 
 data class StatsResult(val activeTasksPercent: Float, val completedTasksPercent: Float)
